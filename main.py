@@ -1,6 +1,11 @@
+import os
+
 from fw import App
 from fw.response import Response, JSONResponse, TemplateResponse
-from wsgiref.simple_server import make_server
+from fw.static import StaticMiddleware
+
+BASE_DIR = os.path.dirname(__name__)
+STATIC_DIRS = [os.path.join(BASE_DIR, 'statics')]
 
 app = App()
 
@@ -22,5 +27,7 @@ def user_detail(request, name):
 
 
 if __name__ == '__main__':
+    app = StaticMiddleware(app, static_root='statics', static_dirs=STATIC_DIRS)
+    from wsgiref.simple_server import make_server
     httpd = make_server('', 8000, app)
     httpd.serve_forever()
