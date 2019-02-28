@@ -1,5 +1,5 @@
 from fw import App
-from fw.response import Response, JSONResponse
+from fw.response import Response, JSONResponse, TemplateResponse
 from wsgiref.simple_server import make_server
 
 app = App()
@@ -10,9 +10,10 @@ def hello(request):
     return JSONResponse({'message': 'Hello World'})
 
 
-@app.route('^/user/$', 'POST')
-def create_user(request):
-    return Response('User Created', status=201)
+@app.route('^/users$', 'GET')
+def users(request):
+    users_list = [f'user{i}' for i in range(10)]
+    return TemplateResponse('users.html', title='User List', users=users_list)
 
 
 @app.route('^/user/(?P<name>\\w+)$', 'GET')
