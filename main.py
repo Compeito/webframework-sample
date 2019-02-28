@@ -1,6 +1,5 @@
-from app import App
+from fw import App
 from wsgiref.simple_server import make_server
-
 
 app = App()
 
