@@ -1,5 +1,5 @@
 from fw import App
-from fw.response import Response
+from fw.response import Response, JSONResponse
 from wsgiref.simple_server import make_server
 
 app = App()
@@ -7,7 +7,7 @@ app = App()
 
 @app.route('^/$', 'GET')
 def hello(request):
-    return Response('Hello World')
+    return JSONResponse({'message': 'Hello World'})
 
 
 @app.route('^/user/$', 'POST')
