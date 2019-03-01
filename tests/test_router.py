@@ -14,7 +14,7 @@ class RouterTests(unittest.TestCase):
 
     def setUp(self):
         self.router = Router()
-        self.router.add('/hoge/<fuga>', 'GET', view)
+        self.router.add('/hoge/<fuga>', view)
 
     def test_route_to_tegex(self):
         test_paths = (
@@ -25,9 +25,9 @@ class RouterTests(unittest.TestCase):
             self.assertEqual(route_to_regex(a), re.compile(b))
 
     def test_url_vars(self):
-        callback, url_vars = self.router.match('/hoge/foo', 'GET')
+        callback, url_vars = self.router.match('/hoge/foo')
         self.assertEqual(url_vars, {'fuga': 'foo'})
 
     def test_404_not_found(self):
-        callback, url_vars = self.router.match('/fuga', 'GET')
+        callback, url_vars = self.router.match('/fuga')
         self.assertEqual(callback, http404)

@@ -14,23 +14,19 @@ class Router:
     def __init__(self):
         self.routes = []
 
-    def add(self, path, method, callback):
+    def add(self, path, callback):
         self.routes.append({
-            'method': method,
             'path': path,
             'path_compiled': route_to_regex(path),
             'callback': callback
         })
 
-    def match(self, path, method):
+    def match(self, path):
         error_callback = http404
         for r in self.routes:
             matched = r['path_compiled'].match(path)
             if not matched:
                 continue
 
-            error_callback = http405
-            url_vars = matched.groupdict()
-            if method == r['method']:
-                return r['callback'], url_vars
+            return r['callback'], matched.groupdict()
         return error_callback, {}
