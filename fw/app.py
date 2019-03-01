@@ -15,7 +15,7 @@ class App:
 
     def route(self, path=None, method='GET', callback=None):
         def decorator(callback_func):
-            self.router.add(method, path, callback_func)
+            self.router.add(path, method, callback_func)
             return callback_func
 
         return decorator(callback) if callback else decorator

@@ -14,7 +14,7 @@ class Router:
     def __init__(self):
         self.routes = []
 
-    def add(self, method, path, callback):
+    def add(self, path, method, callback):
         self.routes.append({
             'method': method,
             'path': path,
@@ -22,7 +22,7 @@ class Router:
             'callback': callback
         })
 
-    def match(self, method, path):
+    def match(self, path, method):
         error_callback = http404
         for r in self.routes:
             matched = r['path_compiled'].match(path)
