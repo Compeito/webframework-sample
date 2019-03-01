@@ -2,6 +2,14 @@ import re
 from .http import http404, http405
 
 
+def route_to_regex(path: str):
+    matched = re.findall('<\\w+>', path)
+    re_path = path
+    for pattern in matched:
+        re_path = re_path.replace(pattern, f'(?P{pattern}\\w+)')
+    return re.compile(f'^{re_path}$')
+
+
 class Router:
     def __init__(self):
         self.routes = []
@@ -10,7 +18,7 @@ class Router:
         self.routes.append({
             'method': method,
             'path': path,
-            'path_compiled': re.compile(path),
+            'path_compiled': route_to_regex(path),
             'callback': callback
         })
 
