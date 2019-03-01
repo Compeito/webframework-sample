@@ -1,0 +1,7 @@
+[run]
+source = fw
+
+[report]
+omit =
+  */tests/*
+  fw/static.py
