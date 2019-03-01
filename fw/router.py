@@ -30,3 +30,7 @@ class Router:
 
             return r['callback'], matched.groupdict()
         return error_callback, {}
+
+    @property
+    def urls(self):
+        return [r['path'] for r in self.routes]

@@ -13,12 +13,12 @@ class App:
         templates = [os.path.join(os.path.abspath('.'), 'templates')]
         self.jinja2_environment = Environment(loader=FileSystemLoader(templates))
 
-    def route(self, path=None, callback=None):
+    def route(self, path=None):
         def decorator(callback_func):
             self.router.add(path, callback_func)
             return callback_func
 
-        return decorator(callback) if callback else decorator
+        return decorator
 
     def __call__(self, env, start_response):
         request = Request(env)
