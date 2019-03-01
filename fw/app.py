@@ -22,7 +22,7 @@ class App:
 
     def __call__(self, env, start_response):
         request = Request(env)
-        callback, url_vars = self.router.match(request.method, request.path)
+        callback, url_vars = self.router.match(request.path, request.method)
 
         response = callback(request, **url_vars)
         start_response(response.status_code, response.header_list)
