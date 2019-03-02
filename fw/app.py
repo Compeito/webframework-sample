@@ -5,6 +5,7 @@ from jinja2 import Environment, FileSystemLoader
 from .router import Router
 from .request import Request
 from .response import TemplateResponse
+from .utils import flatten
 
 
 class App:
@@ -13,12 +14,9 @@ class App:
         templates = [os.path.join(os.path.abspath('.'), 'templates')]
         self.jinja2_environment = Environment(loader=FileSystemLoader(templates))
 
-    def route(self, path=None):
-        def decorator(callback_func):
-            self.router.add(path, callback_func)
-            return callback_func
-
-        return decorator
+    def route(self, urls):
+        for url in flatten(urls):
+            self.router.add(*url.spec)
 
     def __call__(self, env, start_response):
         request = Request(env)
