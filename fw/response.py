@@ -1,6 +1,9 @@
+import os
+import json
 from http.client import responses as http_responses
 from wsgiref.headers import Headers
-import json
+
+from jinja2 import Environment, FileSystemLoader
 
 
 class Response:
@@ -48,6 +51,15 @@ class JSONResponse(Response):
         return [json.dumps(self.dic, **self.json_dump_args).encode(self.charset)]
 
 
+def load_jinja2_env(templates=None):
+    if templates is None:
+        templates = [os.path.join(os.path.abspath('.'), 'templates')]
+    return Environment(loader=FileSystemLoader(templates))
+
+
+jinja2_env = load_jinja2_env()
+
+
 class TemplateResponse(Response):
     default_content_type = 'text/html; charset=UTF-8'
 
@@ -56,6 +68,7 @@ class TemplateResponse(Response):
         self.tpl_args = tpl_args
         super().__init__(body='', status=status, headers=headers, charset=charset)
 
-    def render_body(self, jinja2_environment):
-        template = jinja2_environment.get_template(self.filename)
-        return template.render(**self.tpl_args).encode(self.charset)
+    @property
+    def body(self):
+        template = jinja2_env.get_template(self.filename)
+        return [template.render(**self.tpl_args).encode(self.charset)]
