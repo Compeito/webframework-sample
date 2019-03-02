@@ -5,31 +5,27 @@ from fw.response import Response
 from fw.url import url
 
 
-def view():
+def view(request):
     return Response('hello')
 
 
-def view_name(name):
+def view_name(request, name):
     return Response(f'hello {name}')
-
-
-urls2 = [
-    url('/', view),
-    url('/<name>', view_name),
-]
-
-urls = [
-    url('/', view),
-    url('/user', include=urls2),
-]
 
 
 class AppTests(unittest.TestCase):
 
     def test_nested_urls(self):
         app = App()
-        app.route(urls)
+        urls2 = [
+            url('', view),
+            url('/<name>', view_name),
+        ]
+        app.route([
+            url('/', view),
+            url('/user', include=urls2),
+        ])
         self.assertListEqual(
-            ['/', '/user/', '/user/<name>'],
+            ['/', '/user', '/user/<name>'],
             app.router.urls,
         )

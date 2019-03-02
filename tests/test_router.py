@@ -3,7 +3,7 @@ import unittest
 
 from fw.response import Response
 from fw.router import Router, route_to_regex
-from fw.http import http404
+from fw.request import Request
 
 
 def view(name):
@@ -29,5 +29,7 @@ class RouterTests(unittest.TestCase):
         self.assertEqual(url_vars, {'fuga': 'foo'})
 
     def test_404_not_found(self):
+        request = Request({})
         callback, url_vars = self.router.match('/fuga')
-        self.assertEqual(callback, http404)
+        response = callback(request)
+        self.assertEqual(response.status, 404)
